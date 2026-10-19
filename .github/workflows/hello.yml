@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     env: # متغیرهای محیطی سطح job (برای همه step ها)
       APP_NAME: my-actions-project # یک متغیر ساده
+      MY_SECRET: ${{ secrets.MY_SECRET }} # Secret در سطح job
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
