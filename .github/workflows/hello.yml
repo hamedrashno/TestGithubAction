@@ -4,27 +4,29 @@ name: Hello Workflow
 # رویداد اجرا
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   say-hello:
     runs-on: ubuntu-latest
-    env:                          # متغیرهای محیطی سطح job (برای همه step ها)
+    env: # متغیرهای محیطی سطح job (برای همه step ها)
       APP_NAME: my-actions-project # یک متغیر ساده
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Show env var        # نمایش متغیر محیطی
-        run: echo "App name is $APP_NAME"  # در شل لینوکس با $ صدا زده می‌شود
+      - name: Show env var # نمایش متغیر محیطی
+        run: echo "App name is $APP_NAME" # در شل لینوکس با $ صدا زده می‌شود
 
-      - name: Step-level env      # متغیر مخصوص همین step
+      - name: Step-level env # متغیر مخصوص همین step
         env:
-          GREETING: hello         # فقط در همین step در دسترس است
+          GREETING: hello # فقط در همین step در دسترس است
         run: echo "$GREETING world"
 
-      - name: Use secret          # استفاده از Secret
-        run: echo "Secret length is ${#MY_SECRET}"  # ${#VAR} طول رشته را می‌دهد
+      - name: Use secret # استفاده از Secret
+        run: echo "Secret length is ${#MY_SECRET}" # ${#VAR} طول رشته را می‌دهد
+
+      - name: Echo Secret
         run: echo $MY_SECRET
         env:
-          MY_SECRET: ${{ secrets.MY_SECRET }}  # تزریق Secret به‌عنوان env
+          MY_SECRET: ${{ secrets.MY_SECRET }} # تزریق Secret به‌عنوان env
