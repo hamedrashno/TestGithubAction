@@ -1,14 +1,24 @@
+# نام workflow که در تب Actions نمایش داده می‌شود
 name: Hello Workflow
+
+# رویدادهایی که باعث اجرای این workflow می‌شوند
 on:
-  push:
-    branches: [main]
+  push: # وقتی push انجام شود
+    branches: [main] # فقط روی شاخه main
+
+# لیست job ها
 jobs:
-  say-hello:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: List files
-        run: ls -la
-      - name: Show index.html
-        run: cat index.html
+  say-hello: # نام job (دلخواه)
+    runs-on: ubuntu-latest # ماشین مجازی که job روی آن اجرا می‌شود
+    steps: # لیست step ها (به ترتیب اجرا می‌شوند)
+      - name: Checkout code # نام این step
+        uses: actions/checkout@v4 # اکشن آماده: کد ریپو را روی ماشین کپی می‌کند
+
+      - name: List files # نام این step
+        run: ls -la # دستور شل: لیست فایل‌های پوشه فعلی
+
+      - name: Show index.html # نام این step
+        run: cat index.html # دستور شل: نمایش محتوای فایل index.html
+
+      - name: Print Hamed
+        run: echo "Hello from Hamed"
