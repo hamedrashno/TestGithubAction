@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env: # متغیرهای محیطی سطح job (برای همه step ها)
       APP_NAME: my-actions-project # یک متغیر ساده
-      MY_SECRET: ${{ secrets.MY_SECRET }} # Secret در سطح job
+      MY_SECRET_VALUE: ${{ secrets.MY_SECRET }} # Secret در سطح job
 
     steps:
       - name: Checkout code
@@ -26,9 +26,7 @@ jobs:
         run: echo "$GREETING world"
 
       - name: Use secret # استفاده از Secret
-        run: echo "Secret length is ${#MY_SECRET}" # ${#VAR} طول رشته را می‌دهد
+        run: echo "Secret length is ${#MY_SECRET_VALUE}" # ${#VAR} طول رشته را می‌دهد
 
       - name: Echo Secret
-        run: echo $MY_SECRET
-        env:
-          MY_SECRET: ${{ secrets.MY_SECRET }} # تزریق Secret به‌عنوان env
+        run: echo $MY_SECRET_VALUE
