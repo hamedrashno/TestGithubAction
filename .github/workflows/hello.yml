@@ -22,3 +22,9 @@ jobs:
         env:
           GREETING: hello         # فقط در همین step در دسترس است
         run: echo "$GREETING world"
+
+      - name: Use secret          # استفاده از Secret
+        run: echo "Secret length is ${#MY_SECRET}"  # ${#VAR} طول رشته را می‌دهد
+        run: echo $MY_SECRET
+        env:
+          MY_SECRET: ${{ secrets.MY_SECRET }}  # تزریق Secret به‌عنوان env
