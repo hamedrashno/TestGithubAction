@@ -1,24 +1,24 @@
-# نام workflow که در تب Actions نمایش داده می‌شود
+# نام workflow
 name: Hello Workflow
 
-# رویدادهایی که باعث اجرای این workflow می‌شوند
+# رویداد اجرا
 on:
-  push: # وقتی push انجام شود
-    branches: [main] # فقط روی شاخه main
+  push:
+    branches: [ main ]
 
-# لیست job ها
 jobs:
-  say-hello: # نام job (دلخواه)
-    runs-on: ubuntu-latest # ماشین مجازی که job روی آن اجرا می‌شود
-    steps: # لیست step ها (به ترتیب اجرا می‌شوند)
-      - name: Checkout code # نام این step
-        uses: actions/checkout@v4 # اکشن آماده: کد ریپو را روی ماشین کپی می‌کند
+  say-hello:
+    runs-on: ubuntu-latest
+    env:                          # متغیرهای محیطی سطح job (برای همه step ها)
+      APP_NAME: my-actions-project # یک متغیر ساده
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: List files # نام این step
-        run: ls -la # دستور شل: لیست فایل‌های پوشه فعلی
+      - name: Show env var        # نمایش متغیر محیطی
+        run: echo "App name is $APP_NAME"  # در شل لینوکس با $ صدا زده می‌شود
 
-      - name: Show index.html # نام این step
-        run: cat index.html # دستور شل: نمایش محتوای فایل index.html
-
-      - name: Print Hamed
-        run: echo "Hello from Hamed"
+      - name: Step-level env      # متغیر مخصوص همین step
+        env:
+          GREETING: hello         # فقط در همین step در دسترس است
+        run: echo "$GREETING world"
