@@ -13,12 +13,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build step           # شبیه‌سازی build
-        run: echo "Building..."
+      - name: Create file         # ساخت یک فایل خروجی
+        run: echo "built at $(date)" > build.txt
+
+      - name: Upload artifact     # آپلود فایل به‌عنوان artifact
+        uses: actions/upload-artifact@v4
+        with:                     # ورودی‌های اکشن
+          name: build-output      # نام artifact
+          path: build.txt         # مسیر فایل یا پوشه
 
   deploy:                         # job دوم
     runs-on: ubuntu-latest
-    needs: build                  # فقط بعد از موفقیت job build اجرا می‌شود
+    needs: build                  # بعد از موفقیت build
     steps:
-      - name: Deploy step         # شبیه‌سازی deploy
-        run: echo "Deploying after build succeeded"
+      - name: Download artifact   # دانلود artifact ساخته‌شده در job قبل
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output      # همان نام artifact
+
+      - name: Show file           # نمایش محتوای فایل دانلودشده
+        run: cat build.txt
