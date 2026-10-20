@@ -1,0 +1,28 @@
+name: Rollback IIS
+
+on:
+  workflow_dispatch:
+    inputs:
+      steps_back:
+        description: "چند نسخه به عقب برگردد؟"
+        required: true
+        default: "1"
+        type: choice
+        options:
+          - "1"
+          - "2"
+          - "3"
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Run rollback script (SSH)
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: powershell -ExecutionPolicy Bypass -File "C:\Deploy\my-actions-project\rollback.ps1" -StepsBack ${{ inputs.steps_back }}
