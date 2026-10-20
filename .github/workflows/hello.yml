@@ -1,35 +1,52 @@
-# نام workflow
-name: Hello Workflow
+name: Deploy Pipeline
 
-# رویداد اجرا
 on:
   push:
     branches: [ main ]
+  workflow_dispatch: # فقط فعال‌سازی اجرای دستی
 
 jobs:
-  build:                          # job اول
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create file         # ساخت یک فایل خروجی
+      - name: Build artifact
         run: echo "built at $(date)" > build.txt
 
-      - name: Upload artifact     # آپلود فایل به‌عنوان artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
-        with:                     # ورودی‌های اکشن
-          name: build-output      # نام artifact
-          path: build.txt         # مسیر فایل یا پوشه
+        with:
+          name: build-output
+          path: build.txt
 
-  deploy:                         # job دوم
+  deploy-staging:
     runs-on: ubuntu-latest
-    needs: build                  # بعد از موفقیت build
+    needs: build
+    environment: staging          # به environment staging وصل می‌شود
     steps:
-      - name: Download artifact   # دانلود artifact ساخته‌شده در job قبل
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: build-output      # همان نام artifact
+          name: build-output
 
-      - name: Show file           # نمایش محتوای فایل دانلودشده
-        run: cat build.txt
+      - name: Deploy to staging
+        run: echo "Deploying to staging with token: ${#DEPLOY_TOKEN} chars"
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}   # secret مخصوص staging
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: deploy-staging          # production بعد از staging موفق
+    environment: production        # اینجا منتظر تأیید انسانی می‌ماند
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+
+      - name: Deploy to production
+        run: echo "Deploying to production with token: ${#DEPLOY_TOKEN} chars"
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}   # secret مخصوص production
