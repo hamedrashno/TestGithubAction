@@ -32,7 +32,7 @@ jobs:
           name: build-output
 
       - name: Deploy to staging
-        run: echo "Deploying to staging with token: ${#DEPLOY_TOKEN} chars"
+        run: "echo \"Deploying to staging with token: ${#DEPLOY_TOKEN} chars\""
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}   # secret مخصوص staging
 
