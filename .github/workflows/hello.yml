@@ -35,14 +35,16 @@ jobs:
           path: site
 
       - name: Copy files to server (SCP)
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          source: "site/*"
-          target: "C:/Deploy/my-actions-project/site"
+          source: "site/"
+          target: "/c/Deploy/my-actions-project/incoming"
+          tar_dereference: true
+          overwrite: true
 
       - name: Run deploy script (SSH)
         uses: appleboy/ssh-action@v1.0.3
